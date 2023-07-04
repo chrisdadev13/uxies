@@ -1,13 +1,4 @@
-import { useState } from "react";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/ui/form";
+import { Form, FormControl, FormField, FormItem } from "@/ui/form";
 import { Input } from "@/ui/input";
 import { Button } from "@/ui/button";
 
@@ -61,7 +52,6 @@ export default function SignUp() {
       onSuccess: () => {
         router.push({
           pathname: "/auth/login",
-          query: { msg: "Account created successfully" },
         });
       },
       onError: (err: any) => {
@@ -103,6 +93,7 @@ export default function SignUp() {
                         placeholder="acme"
                         {...field}
                         className="rounded-l-none border-l-0 py-5 pl-1 lowercase focus:outline-none focus:ring-0 focus-visible:ring-0"
+                        value={field.value.trim().toLowerCase()}
                       />
                     </div>
                   </FormControl>
@@ -117,7 +108,7 @@ export default function SignUp() {
                   <Label>Username: </Label>
                   <FormControl>
                     <Input
-                      placeholder="chrisdadev13"
+                      placeholder="chrisdadev"
                       {...field}
                       className="py-5"
                     />

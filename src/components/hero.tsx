@@ -1,8 +1,10 @@
 import { Button } from "@/ui/button";
 import React from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function Hero() {
+  const { data: session } = useSession();
   return (
     <>
       <section className="h-auto">
@@ -29,7 +31,7 @@ export default function Hero() {
               </Link>
             </Button>
             <Button className="ml-3" asChild>
-              <Link href="/sign-up">Get Started</Link>
+              <Link href={session ? "/@me" : "/sign-up"}>Get started!</Link>
             </Button>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-
+import { generateRandomId } from "@/utils/generate-id";
 import { prisma } from "@/server/db";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -47,24 +47,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  const user = await prisma.user.create({
+  await prisma.user.create({
     data: {
-      username: usernameTaken ? `${username}${generateRandomId()}` : username,
+      username: usernameTaken ? `${username}#${generateRandomId()}` : username,
       email: userEmail,
-    },
-  });
-
-  const team = await prisma.team.create({
-    data: {
-      name: teamName,
-      limit: teamLimit,
-    },
-  });
-
-  await prisma.membership.create({
-    data: {
-      userId: user.id,
-      teamId: team.id,
+      memberships: {
+        create: {
+          team: {
+            create: {
+              name: teamName,
+              limit: teamLimit,
+            },
+          },
+        },
+      },
     },
   });
 

@@ -19,10 +19,11 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      role: Role;
     } & DefaultSession["user"];
     membership: {
-      role: Role;
       team: string;
+      teamName: string;
     };
   }
 
@@ -39,7 +40,7 @@ export const authOptions: NextAuthOptions = {
           email: user.email as string,
         },
         include: {
-          membership: {
+          memberships: {
             include: {
               team: {
                 select: {
@@ -62,16 +63,25 @@ export const authOptions: NextAuthOptions = {
         where: {
           userId: user.id,
         },
+        include: {
+          team: true,
+        },
       });
+
+      if (session.user) {
+        session.user.id = user.id;
+      }
       return {
         ...session,
         user: {
-          ...session.user,
+          name: "",
+          image: "",
           id: user.id,
+          role: membership?.role,
         },
         membership: {
-          role: membership?.role,
           team: membership?.teamId,
+          teamName: membership?.team.name,
         },
       };
     },

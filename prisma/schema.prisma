@@ -58,12 +58,13 @@ model User {
     emailVerified DateTime?
     accounts      Account[]
     sessions      Session[]
-    membership    Membership?
+
+    memberships   Membership[]
 }
 
 model Team {
     id          String  @id @default(cuid())
-    name        String
+    name        String  @unique 
     bio         String?
     members     Membership[]
     limit       Int
@@ -72,9 +73,12 @@ model Team {
 model Membership {
     id          String @id @default(cuid())
     user        User   @relation(fields: [userId], references: [id]) 
-    userId      String @unique
+    userId      String 
     role        Role   @default(OWNER)
 
     team        Team   @relation(fields: [teamId], references: [id])
-    teamId      String @unique
+    teamId      String 
+
+    @@index([userId])
+    @@index([teamId])
 }

@@ -93,7 +93,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     redirect: {
       permanent: false,
-      destination: `/workspace/${session.membership.team}`,
+      destination: `/@me`,
     },
     props: { session },
   };
